@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\artist;
+use App\Http\Resources\ArtistResource;
 use Illuminate\Http\Request;
 
 class ArtistController extends Controller
@@ -14,7 +15,7 @@ class ArtistController extends Controller
      */
     public function index()
     {
-        //
+        return new ArtistResource::collection(artist::all());
     }
 
     /**
