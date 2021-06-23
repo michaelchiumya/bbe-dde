@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\artist;
 use App\Http\Resources\ArtistResource;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
 
 class ArtistController extends Controller
 {
@@ -26,12 +24,10 @@ class ArtistController extends Controller
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
-        /** validator instance manually using the Validator facade
-        The make method on the facade generates a new validator instance:*/
            artist::create($request->all());
            return response()->json(null, 204);
     }
@@ -80,9 +76,9 @@ class ArtistController extends Controller
     /**
      * Remove the specified resource from storage.
      * @param $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function destroy($id): \Illuminate\Http\JsonResponse
+    public function destroy($id): JsonResponse
     {
         artist::destroy($id);
         return response()->json(null, 204);
