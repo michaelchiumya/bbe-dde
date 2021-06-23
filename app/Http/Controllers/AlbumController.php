@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\artist;
+use App\Album;
+use App\Http\Resources\AlbumResource;
 use App\Http\Resources\ArtistResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ArtistController extends Controller
+class AlbumController extends Controller
 {
 
     /**
@@ -17,7 +18,7 @@ class ArtistController extends Controller
      */
     public function index(): JsonResource
     {
-        return new JsonResource(artist::all());
+        return new JsonResource(Album::all());
     }
 
 
@@ -28,8 +29,8 @@ class ArtistController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-           artist::create($request->all());
-           return response()->json(null, 204);
+        Album::create($request->all());
+        return response()->json(null, 204);
     }
 
 
@@ -40,11 +41,11 @@ class ArtistController extends Controller
      */
     public function show($id)
     {
-        $artist = artist::find($id);
-        if(!$artist){
+        $album = Album::find($id);
+        if(!$album){
             return response()->json(['not found'], 404);
         }
-        return new ArtistResource($artist);
+        return new ArtistResource($album);
     }
 
 
@@ -52,16 +53,16 @@ class ArtistController extends Controller
      * Show the form for editing the specified resource.
      * @param Request $request
      * @param $id
-     * @return ArtistResource|JsonResponse
+     * @return AlbumResource|JsonResponse
      */
     public function edit(Request $request, $id)
     {
-        $artist = artist::find($id);
-        if(!$artist){
+        $album = Album::find($id);
+        if(!$album){
             return response()->json(['not found'], 404);
         }
-        $artist-> update($request->all());
-        return new ArtistResource($artist);
+        $album-> update($request->all());
+        return new AlbumResource($album);
     }
 
 
@@ -69,16 +70,16 @@ class ArtistController extends Controller
      * Update the specified resource in storage.
      * @param Request $request
      * @param $id
-     * @return ArtistResource|JsonResponse
+     * @return AlbumResource|JsonResponse
      */
     public function update(Request $request, $id)
     {
-        $artist = artist::find($id);
-        if(!$artist){
+        $album = Album::find($id);
+        if(!$album){
             return response()->json(['not found'], 404);
         }
-        $artist->update($request->all());
-        return new ArtistResource($artist);
+        $album->update($request->all());
+        return new AlbumResource($album);
     }
 
 
@@ -89,7 +90,7 @@ class ArtistController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        artist::destroy($id);
+        Album::destroy($id);
         return response()->json(null, 204);
     }
 }
