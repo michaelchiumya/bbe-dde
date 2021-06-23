@@ -26,14 +26,14 @@ class ArtistController extends Controller
     /**
      * Store a newly created resource in storage.
      * @param Request $request
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request): Response
+    public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         /** validator instance manually using the Validator facade
         The make method on the facade generates a new validator instance:*/
            artist::create($request->all());
-           return response(['created'=>true] ,200);
+           return response()->json(null, 204);
     }
 
 
@@ -85,6 +85,6 @@ class ArtistController extends Controller
     public function destroy($id): \Illuminate\Http\JsonResponse
     {
         artist::destroy($id);
-        return response()->json(null, 204);;
+        return response()->json(null, 204);
     }
 }
