@@ -28,8 +28,14 @@ class ArtistController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-           artist::create($request->all());
-           return response()->json(null, 204);
+
+               artist::create($request->all());
+               return response()->json(["created" =>true], 204);
+
+
+                 //return response()->json(["created" =>false], 500);
+
+
     }
 
 
@@ -89,6 +95,10 @@ class ArtistController extends Controller
      */
     public function destroy($id): JsonResponse
     {
+        $artist = artist::find($id);
+        if(!$artist){
+            return response()->json(['not found'], 404);
+        }
         artist::destroy($id);
         return response()->json(null, 204);
     }

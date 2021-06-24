@@ -17,6 +17,7 @@ class CreateArtistsTable extends Migration
             $table->id();
             $table->string("name");
             $table->text("biography");
+            $table->lineString("image")->nullable();
             $table->lineString("instagram")->nullable();
             $table->lineString("facebook")->nullable();
             $table->lineString("applemusic")->nullable();

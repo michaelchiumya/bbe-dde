@@ -17,6 +17,7 @@ class CreateSongsTable extends Migration
             $table->id();
             $table->linestring("title");
             $table->linestring("link");
+            $table->lineString("image")->nullable();
             $table->linestring("producer")->nullable();
             $table->linestring("writer")->nullable();
             $table->linestring("feature")->nullable();

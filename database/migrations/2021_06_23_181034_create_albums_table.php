@@ -17,8 +17,9 @@ class CreateAlbumsTable extends Migration
             $table->id();
             $table->string("title");
             $table->lineString("label");
-            $table->date("release_date")->nullable();
             $table->linestring("link");
+            $table->date("release_date")->nullable();
+            $table->lineString("image")->nullable();
             $table->unsignedBigInteger('artist_id');
             $table->timestamps();
 
