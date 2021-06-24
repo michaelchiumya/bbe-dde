@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\artist;
 use App\Http\Resources\ArtistResource;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -13,11 +14,11 @@ class ArtistController extends Controller
 
     /**
      * Display a listing of the resource.
-     * @return JsonResource
+     * @return artist[]|Collection|JsonResource
      */
-    public function index(): JsonResource
+    public function index()
     {
-        return new JsonResource(artist::all());
+        return artist::all();
     }
 
 
@@ -28,13 +29,8 @@ class ArtistController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-
-               artist::create($request->all());
-               return response()->json(["created" =>true], 204);
-
-
-                 //return response()->json(["created" =>false], 500);
-
+        artist::create($request->all());
+        return response()->json(["created" =>true], 204);
 
     }
 
@@ -52,6 +48,7 @@ class ArtistController extends Controller
         }
         return new ArtistResource($artist);
     }
+
 
 
     /**

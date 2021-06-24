@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Album;
 use App\Http\Resources\AlbumResource;
 use App\Http\Resources\ArtistResource;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -14,11 +15,11 @@ class AlbumController extends Controller
 
     /**
      * Display a listing of the resource.
-     * @return JsonResource
+     * @return Album[]|Collection|JsonResource
      */
-    public function index(): JsonResource
+    public function index()
     {
-        return new JsonResource(Album::all());
+        return Album::all();
     }
 
 
@@ -30,7 +31,7 @@ class AlbumController extends Controller
     public function store(Request $request): JsonResponse
     {
         Album::create($request->all());
-        return response()->json(null, 204);
+        return response()->json(["created" =>true], 204);
     }
 
 
@@ -90,7 +91,11 @@ class AlbumController extends Controller
      */
     public function destroy($id): JsonResponse
     {
+        $album = Album::find($id);
+        if(!$album ){
+            return response()->json(['not found'], 404);
+        }
         Album::destroy($id);
-        return response()->json(null, 204);
+        return response()->json(["deleted"], 204);
     }
 }
