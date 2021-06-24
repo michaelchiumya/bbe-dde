@@ -18,37 +18,35 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
-
-Route::get('/artists', 'ArtistController@index') ;
-Route::post('/artists', 'ArtistController@store') ;
-Route::get('/artists/{id}', 'ArtistController@show');
-Route::put('/artists/{id}', 'ArtistController@edit');
-Route::patch('/artists/{id}', 'ArtistController@update') ;
-Route::delete('/artists/{id}', 'ArtistController@destroy') ;
-
-Route::get('/albums', 'AlbumController@index') ;
-Route::post('/albums', 'AlbumController@store') ;
-Route::get('/albums/{id}', 'AlbumController@show');
-Route::put('/albums/{id}', 'AlbumController@edit');
-Route::patch('/albums/{id}', 'AlbumController@update') ;
-Route::delete('/albums/{id}', 'AlbumController@destroy') ;
-
-Route::get('/songs', 'SongController@index') ;
-Route::post('/songs', 'SongController@store') ;
-Route::get('/songs/{id}', 'SongController@show');
-Route::put('/songs/{id}', 'SongController@edit');
-Route::patch('/songs/{id}', 'SongController@update') ;
-Route::delete('/songs/{id}', 'SongController@destroy');
-Route::get('artist/{id}/songs/', 'SongController@artistSongs');
-Route::get('artist/{id}/albums/', 'SongController@artistAlbums');
+Route::group(['prefix' => 'artists'], function(){
+    Route::get('/', 'ArtistController@index') ;
+    Route::post('/', 'ArtistController@store') ;
+    Route::get('/{id}', 'ArtistController@show');
+    Route::put('/{id}', 'ArtistController@edit');
+    Route::patch('{id}', 'ArtistController@update') ;
+    Route::delete('{id}', 'ArtistController@destroy') ;
+});
 
 
-//Route::middleware(['first', 'second'])->group(function () {
-//    Route::get('/', function () {
-//        // Uses first & second Middleware
-//    });
-//
-//    Route::get('user/profile', function () {
-//        // Uses first & second Middleware
-//    });
-//});
+Route::group(['prefix' => 'albums'], function(){
+    Route::get('/', 'AlbumController@index') ;
+    Route::post('/', 'AlbumController@store') ;
+    Route::get('/{id}', 'AlbumController@show');
+    Route::put('/{id}', 'AlbumController@edit');
+    Route::patch('/{id}', 'AlbumController@update') ;
+    Route::delete('/{id}', 'AlbumController@destroy') ;
+});
+
+
+Route::group(['prefix' => 'songs'], function(){
+    Route::get('/', 'SongController@index') ;
+    Route::post('/', 'SongController@store') ;
+    Route::get('/{id}', 'SongController@show');
+    Route::put('/{id}', 'SongController@edit');
+    Route::patch('/{id}', 'SongController@update') ;
+    Route::delete('/{id}', 'SongController@destroy');
+    Route::get('/artist/{id}', 'SongController@artistSongs');
+    Route::get('/artist/{id}/album/', 'SongController@artistAlbums');
+});
+
+
