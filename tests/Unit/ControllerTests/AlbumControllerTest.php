@@ -1,9 +1,10 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Http;
 
 use App\Album;
 use App\artist;
+use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

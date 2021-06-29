@@ -31,13 +31,13 @@ class ArtistTest extends TestCase
          $payload =  [
               "name" => $this->faker->name,
               "biography" => $this->faker->paragraph,
-              "image"=> $this->faker->sentence,
-              "instagram" => $this->faker->sentence,
-              "facebook"=>$this->faker->sentence,
-             "applemusic" => $this->faker->sentence,
-             "youtube" => $this->faker->sentence,
-             "soundcloud" => $this->faker->sentence,
-             "spotify" => $this->faker->sentence
+              "image"=> $this->faker->url,
+              "instagram" => $this->faker->url,
+              "facebook"=>$this->faker->url,
+             "applemusic" => $this->faker->url,
+             "youtube" => $this->faker->url,
+             "soundcloud" => $this->faker->url,
+             "spotify" => $this->faker->url
            ];
 
           $this->withoutExceptionHandling();
@@ -61,13 +61,13 @@ class ArtistTest extends TestCase
         $payload =  [
             "name" => "edited",
             "biography" => "edited bio",
-            "image"=> $this->faker->sentence,
-            "instagram" => $this->faker->sentence,
-            "facebook"=>$this->faker->sentence,
-            "applemusic" => $this->faker->sentence,
-            "youtube" => $this->faker->sentence,
-            "soundcloud" => $this->faker->sentence,
-            "spotify" => $this->faker->sentence
+            "image"=> $this->faker->url,
+            "instagram" => $this->faker->url,
+            "facebook"=>$this->faker->url,
+            "applemusic" => $this->faker->url,
+            "youtube" => $this->faker->url,
+            "soundcloud" => $this->faker->url,
+            "spotify" => $this->faker->url
         ];
         $this->withoutExceptionHandling();
         $response = $this->put('api/artists/'.$artist->id, $payload );

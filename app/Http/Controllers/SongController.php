@@ -61,7 +61,7 @@ class SongController extends Controller
         if(!$song){
             return response()->json(['not found'], 404);
         }
-        $song-> update($request->all());
+        $song->update($request->all());
         return new SongResource($song);
     }
 
@@ -74,12 +74,12 @@ class SongController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $song = artist::find($id);
+        $song = Song::find($id);
         if(!$song){
             return response()->json(['not found'], 404);
         }
-        $song->update($request->all());
-        return new SongResource($song);
+        $song->update( $request->all());
+        return $song;
     }
 
 
