@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,17 +18,20 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
-Route::group(['prefix' => 'artists'], function(){
+Route::group(['prefix' => 'artists', "middleware"=> "auth:api"], function(){
     Route::get('/', 'ArtistController@index') ;
     Route::post('/', 'ArtistController@store') ;
     Route::get('/{id}', 'ArtistController@show');
     Route::put('/{id}', 'ArtistController@edit');
-    Route::patch('{id}', 'ArtistController@update') ;
-    Route::delete('{id}', 'ArtistController@destroy') ;
+    Route::patch('/{id}', 'ArtistController@update') ;
+    Route::delete('/{id}', 'ArtistController@destroy') ;
+
+    Route::get('/{id}/songs', 'SongController@artistSongs');
+    Route::get('/{id}/albums', 'SongController@artistAlbums');
 });
 
 
-Route::group(['prefix' => 'albums'], function(){
+Route::group(['prefix' => 'albums', "middleware"=> "auth:api"], function(){
     Route::get('/', 'AlbumController@index') ;
     Route::post('/', 'AlbumController@store') ;
     Route::get('/{id}', 'AlbumController@show');
@@ -38,15 +41,18 @@ Route::group(['prefix' => 'albums'], function(){
 });
 
 
-Route::group(['prefix' => 'songs'], function(){
-    Route::get('/', 'SongController@index') ;
+Route::group(['prefix' => 'songs', "middleware"=> "auth:api"], function(){
+    Route::get('/', 'SongController@index');
     Route::post('/', 'SongController@store') ;
     Route::get('/{id}', 'SongController@show');
     Route::put('/{id}', 'SongController@edit');
     Route::patch('/{id}', 'SongController@update') ;
     Route::delete('/{id}', 'SongController@destroy');
-    Route::get('/artist/{id}', 'SongController@artistSongs');
-    Route::get('/artist/{id}/album/', 'SongController@artistAlbums');
 });
 
-
+Route::group(['prefix' => 'user'], function() {
+    Route::post('/register', 'UserController@store');
+    Route::post('/login',["as"=>"login", "uses"=> 'UserController@login'] );
+    Route::get('/logout','UserController@logout')->middleware("auth:api");
+    Route::get('/me/{id}', 'UserController@user')->middleware("auth:api");
+});
