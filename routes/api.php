@@ -54,5 +54,7 @@ Route::group(['prefix' => 'user'], function() {
     Route::post('/register', 'UserController@store');
     Route::post('/login',["as"=>"login", "uses"=> 'UserController@login'] );
     Route::get('/logout','UserController@logout')->middleware("auth:api");
-    Route::get('/me/{id}', 'UserController@user')->middleware("auth:api");
+    Route::get('/me/{id}', 'UserController@show')->middleware("auth:api");
+    Route::put('/{id}', 'UserController@update')->middleware("auth:api");
+    Route::delete('/{id}', 'UserController@destroy')->middleware("auth:api");
 });

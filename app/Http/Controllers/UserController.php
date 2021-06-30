@@ -3,42 +3,18 @@
 namespace App\Http\Controllers;
 
 
+
 use App\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 
 class UserController extends Controller
 {
-
-
-    /**
-     * Display a resource.
-     * @return JsonResponse
-     */
-    public function user($id)
-    {
-        $user = User::find($id);
-        if(!$user){
-            return response()->json(['not found'], 404);
-        }
-        return $user;
-    }
-
-
-
-    /**
-     * Show the form for creating a new resource.
-     * @return void
-     */
-    public function create()
-    {
-        //
-    }
-
 
     /**
      * login user to acquire token for stateless http request.
@@ -56,7 +32,7 @@ class UserController extends Controller
             return response(['message' => 'Invalid Credentials']);
         }
         $accessToken = auth()->user()->createToken('authToken')->accessToken;
-        return response(['user' => auth()->user(), 'access_token' => $accessToken]);
+        return response(['user' => auth()->user(), 'access_token' => $accessToken], 200);
     }
 
 
@@ -76,7 +52,7 @@ class UserController extends Controller
          $validatedData['password'] = bcrypt($request->password);
          $user = User::create($validatedData);
          $accessToken = $user->createToken('authToken')->accessToken;
-        return response([ 'user' => $user, 'access_token' => $accessToken]);
+        return response([ 'user' => $user, 'access_token' => $accessToken], 204);
     }
 
 
@@ -86,9 +62,10 @@ class UserController extends Controller
      */
     public function logout(Request $request): JsonResponse
     {
-        $result = $request->user()->token()->revoke();
+        //$result = auth()->user()->token()->revoke();
+       $result = auth('api')->user()->token()->revoke();
 
-        if($result){
+        if($result ){
            return  response()->json(['error'=>false,'message'=>'User logout successfully.','result'=>[]]);
 
           }else{
@@ -100,42 +77,43 @@ class UserController extends Controller
     /**
      * Display the specified resource.     *
      * @param  int  $id
-     * @return void
+     * @return JsonResponse
      */
-    public function show($id)
+    public function show($id): JsonResponse
     {
-        //
+        $user = User::find($id);
+        if(!$user){
+            return response()->json(['not found'], 404);
+        }
+        return new JsonResponse($user);
     }
 
-    /**
-     * Show the form for editing the specified resource.     *
-     * @param  int  $id
-     * @return void
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.     *
      * @param Request $request
      * @param  int  $id
-     * @return Response
+     * @return JsonResponse
      */
-    public function update(Request $request, $id): Response
+    public function update(Request $request, $id): JsonResponse
     {
-        //
+        $user = User::find($id);
+        if(!$user){
+            return response()->json(['not found'], 404);
+        }
+        $user->update( $request->all());
+        return new JsonResponse($user);
     }
 
 
     /**
      * Remove the specified resource from storage.     *
      * @param  int  $id
-     * @return Response
+     * @return JsonResponse
      */
-    public function destroy($id): Response
+    public function destroy($id): JsonResponse
     {
-        //
+        User::destroy($id);
+        return response()->json("resource deleted", 204);
     }
 }
