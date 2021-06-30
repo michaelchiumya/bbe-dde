@@ -5,6 +5,7 @@ namespace Tests\Unit\Http;
 use App\Album;
 use App\artist;
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -19,14 +20,18 @@ class AlbumControllerTest extends TestCase
     public function test_get_albums_returns_albums()
     {
         factory(Album::class, 3)->create();
+        $user = factory(User::class)->create();
+
         $this->withoutExceptionHandling();
-        $response = $this->get('/api/albums');
+        $response = $this->actingAs($user, 'api')->get('/api/albums');
         $response->assertStatus(200);
     }
 
     public function test_can_post_albums()
     {
         $artist =  factory(artist::class)->create()->id;
+        $user = factory(User::class)->create();
+
         $payload =  [
             "title" => $this->faker->title,
             "label" => $this->faker->company,
@@ -37,7 +42,7 @@ class AlbumControllerTest extends TestCase
         ];
 
         $this->withoutExceptionHandling();
-        $response = $this->json('post','/api/albums', $payload);
+        $response = $this->actingAs($user, 'api')->json('post','/api/albums', $payload);
         $response->assertStatus(204);
         $this->assertDatabaseHas('albums', [ "title" => $payload['title'] ]);
     }
@@ -45,13 +50,15 @@ class AlbumControllerTest extends TestCase
     public function test_show_album_returns_one_album()
     {
         $album = factory(Album::class)->create();
-        $response = $this->get('api/albums/'.$album->id);
+        $user = factory(User::class)->create();
+        $response = $this->actingAs($user, 'api')->get('api/albums/'.$album->id);
         $response->assertStatus(200);
     }
 
     public function test_can_update_album()
     {
         $album = factory(Album::class)->create();
+        $user = factory(User::class)->create();
         $payload =  [
             "title" => "edited",
             "label" => $this->faker->company,
@@ -60,7 +67,7 @@ class AlbumControllerTest extends TestCase
             "image"=> $this->faker->url
         ];
         $this->withoutExceptionHandling();
-        $response = $this->put('api/albums/'.$album->id, $payload );
+        $response =$this->actingAs($user, 'api')->put('api/albums/'.$album->id, $payload );
         $response->assertStatus(200);
         $this->assertDatabaseHas('albums', [ "title" =>"edited" ]);
     }
@@ -68,7 +75,8 @@ class AlbumControllerTest extends TestCase
     public function test_destroy_album()
     {
         $album = factory(Album::class)->create();
-        $response = $this->delete('api/albums/'.$album->id);
+        $user = factory(User::class)->create();
+        $response = $this->actingAs($user, 'api')->delete('api/albums/'.$album->id);
         $response->assertStatus(204);
         $this->assertDatabaseCount("albums", 0);
     }

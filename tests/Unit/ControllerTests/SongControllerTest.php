@@ -7,6 +7,7 @@ namespace Tests\Unit;
 use App\Album;
 use App\artist;
 use App\Song;
+use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -18,10 +19,10 @@ class SongControllerTest extends TestCase
     {
         factory(artist::class)->create();
         factory(Album::class)->create();
+        $user = factory(User::class)->create();
         factory(Song::class, 2)->create();
-
         $this->withoutExceptionHandling();
-        $response = $this->get('/api/songs');
+        $response = $this->actingAs($user, "api")->get('/api/songs');
         $response->assertStatus(200);
     }
 
@@ -29,7 +30,7 @@ class SongControllerTest extends TestCase
     {
         $artist = factory(artist::class)->create()->id;
         $album = factory(Album::class)->create()->id;
-
+        $user = factory(User::class)->create();
         $payload =  [
             "title" => $this->faker->title,
             "link" => $this->faker->url,
@@ -44,7 +45,7 @@ class SongControllerTest extends TestCase
         ];
 
         $this->withoutExceptionHandling();
-        $response = $this->json('post','/api/songs', $payload);
+        $response =$this->actingAs($user, "api")->json('post','/api/songs', $payload);
         $response->assertStatus(204);
         $this->assertDatabaseHas('songs', [ "title" => $payload['title'] ]);
     }
@@ -54,8 +55,8 @@ class SongControllerTest extends TestCase
         factory(artist::class)->create();
         factory(Album::class)->create();
         $song = factory(Song::class)->create();
-
-        $response = $this->get('api/songs/'.$song->id);
+        $user = factory(User::class)->create();
+        $response = $this->actingAs($user, "api")->get('api/songs/'.$song->id);
         $response->assertStatus(200);
     }
 
@@ -74,8 +75,9 @@ class SongControllerTest extends TestCase
             "streams" => $this->faker->numberBetween(0, 100),
 
         ];
+        $user = factory(User::class)->create();
         $this->withoutExceptionHandling();
-        $response = $this->put('api/songs/'.$song->id, $payload );
+        $response = $this->actingAs($user, "api")->put('api/songs/'.$song->id, $payload );
         $response->assertStatus(200);
        // $this->assertDatabaseHas('songs', [ "title" =>"edited" ]);
     }
@@ -85,8 +87,8 @@ class SongControllerTest extends TestCase
         factory(artist::class)->create();
         factory(Album::class)->create();
         $song = factory(Song::class)->create();
-
-        $response = $this->delete('api/songs/'.$song->id);
+        $user = factory(User::class)->create();
+        $response = $this->actingAs($user, "api")->delete('api/songs/'.$song->id);
         $response->assertStatus(204);
         $this->assertDatabaseCount("songs", 0);
     }
